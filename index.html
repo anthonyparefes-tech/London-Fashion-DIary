@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>London Fashion Diary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-cream: #F5F2EA;
+      --card-bg: #FCFAF6;
+      --olive-dark: #2A3324;
+      --olive-muted: #4B553D;
+      --crimson: #9E2A2B;
+      --crimson-hover: #7E1F20;
+      --accent-sand: #D8CEBD;
+      --border-color: #D3CAB9;
+      --text-dark: #1F241C;
+      --text-muted: #6B7261;
+      --tag-bg: #EAE3D2;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-dark);
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding-bottom: 5rem;
+    }
+
+    header {
+      background: var(--olive-dark);
+      color: var(--bg-cream);
+      padding: 3.5rem 1.5rem;
+      border-bottom: 4px solid var(--crimson);
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    header p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--accent-sand);
+      margin-top: 0.6rem;
+      font-size: 1.15rem;
+      letter-spacing: 0.05em;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem;
+    }
+
+    .editor-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(42, 51, 36, 0.06);
+      margin-bottom: 3.5rem;
+    }
+
+    .editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+    }
+
+    .editor-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--olive-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .editor-header h2::before {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: var(--crimson);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .form-group-full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--olive-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 3px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: var(--crimson);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .media-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed var(--border-color);
+      border-radius: 4px;
+      padding: 1.25rem;
+      text-align: center;
+      cursor: pointer;
+      background: var(--bg-cream);
+      transition: all 0.2s;
+    }
+
+    .file-input-wrapper:hover {
+      border-color: var(--crimson);
+      background: #FFFFFF;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .preview-container {
+      margin-top: 1rem;
+      display: none;
+      align-items: center;
+      gap: 1rem;
+      background: var(--bg-cream);
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .preview-container img {
+      max-height: 90px;
+      border: 1px solid var(--border-color);
+      object-fit: cover;
+    }
+
+    .btn-submit {
+      background: var(--crimson);
+      color: #FFFFFF;
+      border: none;
+      padding: 0.85rem 2rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.2s;
+      align-self: start;
+    }
+
+    .btn-submit:hover {
+      background: var(--crimson-hover);
+    }
+
+    .feed-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--olive-dark);
+      padding-bottom: 0.75rem;
+    }
+
+    .feed-controls h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--olive-dark);
+    }
+
+    .diary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .entry-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .entry-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(42, 51, 36, 0.08);
+    }
+
+    .entry-image-frame {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: var(--olive-dark);
+      overflow: hidden;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .entry-image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .entry-card:hover .entry-image-frame img {
+      transform: scale(1.03);
+    }
+
+    .entry-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .entry-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--crimson);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .entry-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--olive-dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .entry-notes {
+      font-size: 0.92rem;
+      color: var(--text-dark);
+      white-space: pre-wrap;
+      margin-bottom: 1.25rem;
+      flex: 1;
+    }
+
+    .entry-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .entry-tag {
+      background: var(--tag-bg);
+      color: var(--olive-dark);
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+      letter-spacing: 0.03em;
+    }
+
+    .entry-actions {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.75rem;
+      margin-top: auto;
+    }
+
+    .btn-action {
+      background: transparent;
+      border: none;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: var(--olive-muted);
+      transition: color 0.15s;
+    }
+
+    .btn-action:hover {
+      color: var(--crimson);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text-muted);
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .media-inputs {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>London Fashion Diary</h1>
+    <p>Field notes, street style observations, and curation</p>
+  </header>
+
+  <div class="container">
+    <!-- Entry Form -->
+    <section class="editor-section">
+      <div class="editor-header">
+        <h2 id="form-heading">Create Journal Entry</h2>
+        <button id="cancel-edit-btn" style="display:none;" class="btn-action">Cancel Edit</button>
+      </div>
+
+      <form id="diary-form">
+        <input type="hidden" id="edit-id" value="">
+        <div class="form-grid">
+          <div>
+            <label for="entry-title">Title / Headline</label>
+            <input type="text" id="entry-title" placeholder="e.g. Soho Layering & Heavy Leather" required>
+          </div>
+
+          <div>
+            <label for="entry-location">Location / Neighborhood</label>
+            <input type="text" id="entry-location" placeholder="e.g. Shoreditch High St, E1">
+          </div>
+
+          <div>
+            <label for="entry-date">Date</label>
+            <input type="date" id="entry-date" required>
+          </div>
+
+          <div>
+            <label for="entry-tags-input">Tags (comma-separated)</label>
+            <input type="text" id="entry-tags-input" placeholder="e.g. Streetwear, Autumn, Footwear">
+          </div>
+
+          <div class="form-group-full">
+            <label for="entry-notes-input">Field Notes & Observations</label>
+            <textarea id="entry-notes-input" placeholder="Document silhouette details, styling notes, textiles, cuts..." required></textarea>
+          </div>
+
+          <div class="form-group-full">
+            <label>Image Source (Upload file or paste direct URL)</label>
+            <div class="media-inputs">
+              <div class="file-input-wrapper">
+                <span>Click or drag image file here</span>
+                <input type="file" id="entry-file" accept="image/*">
+              </div>
+              <div>
+                <input type="text" id="entry-url" placeholder="Or paste image URL (https://...)">
+              </div>
+            </div>
+
+            <div id="image-preview" class="preview-container">
+              <img id="preview-img" src="" alt="Selected Preview">
+              <span id="preview-filename" style="font-size: 0.8rem; color: var(--text-muted);"></span>
+              <button type="button" id="remove-img-btn" class="btn-action" style="margin-left: auto;">Remove</button>
+            </div>
+          </div>
+
+          <div class="form-group-full">
+            <button type="submit" id="save-btn" class="btn-submit">Publish Entry</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- Entries Display -->
+    <section>
+      <div class="feed-controls">
+        <h3>Archives & Notes</h3>
+        <span id="entry-count" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);">0 Entries</span>
+      </div>
+
+      <div class="diary-grid" id="diary-grid">
+        <!-- Dynamically rendered -->
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'london_fashion_diary_data';
+
+    const defaultEntries = [
+      {
+        id: 'default-1',
+        title: 'Shoreditch Proportion Play',
+        location: 'Redchurch St, London',
+        date: '2026-10-08',
+        notes: 'Oversized padded flight jackets paired with raw-edge, unhemmed wide-leg sweats and chunky sculpted footwear. Strong focus on heavyweight jersey and textured leather accents.',
+        tags: ['Streetwear', 'Outerwear', 'Footwear'],
+        image: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80'
+      },
+      {
+        id: 'default-2',
+        title: 'Central London Tailoring Shift',
+        location: 'Mayfair, London',
+        date: '2026-10-10',
+        notes: 'Double-breasted structured coats paired back with relaxed sportswear fundamentals. Muted earthy olives, washed greys, and deep burgundy trims.',
+        tags: ['Tailoring', 'Autumn Palette', 'Layers'],
+        image: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=800&q=80'
+      }
+    ];
+
+    let currentImageData = '';
+
+    function getEntries() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultEntries));
+        return defaultEntries;
+      }
+      return JSON.parse(stored);
+    }
+
+    function saveEntries(entries) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+      renderEntries();
+    }
+
+    function renderEntries() {
+      const grid = document.getElementById('diary-grid');
+      const countLabel = document.getElementById('entry-count');
+      const entries = getEntries();
+
+      countLabel.textContent = `${entries.length} ${entries.length === 1 ? 'Entry' : 'Entries'}`;
+
+      if (entries.length === 0) {
+        grid.innerHTML = '<div class="empty-state">No diary notes logged yet. Use the editor above to add one.</div>';
+        return;
+      }
+
+      grid.innerHTML = entries.map(item => `
+        <article class="entry-card" id="card-${item.id}">
+          ${item.image ? `
+            <div class="entry-image-frame">
+              <img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.src='https://placehold.co/600x400/2A3324/F5F2EA?text=London+Diary'">
+            </div>
+          ` : ''}
+          <div class="entry-content">
+            <div class="entry-meta">
+              <span>${item.location || 'London'}</span>
+              <span>${item.date}</span>
+            </div>
+            <h4 class="entry-title">${escapeHTML(item.title)}</h4>
+            <p class="entry-notes">${escapeHTML(item.notes)}</p>
+            ${item.tags && item.tags.length ? `
+              <div class="entry-tags">
+                ${item.tags.map(t => `<span class="entry-tag">#${escapeHTML(t.trim())}</span>`).join('')}
+              </div>
+            ` : ''}
+            <div class="entry-actions">
+              <button class="btn-action" onclick="editEntry('${item.id}')">Edit</button>
+              <button class="btn-action" onclick="deleteEntry('${item.id}')">Delete</button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function escapeHTML(str) {
+      if (!str) return '';
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag] || tag));
+    }
+
+    const form = document.getElementById('diary-form');
+    const titleInput = document.getElementById('entry-title');
+    const locationInput = document.getElementById('entry-location');
+    const dateInput = document.getElementById('entry-date');
+    const notesInput = document.getElementById('entry-notes-input');
+    const tagsInput = document.getElementById('entry-tags-input');
+    const fileInput = document.getElementById('entry-file');
+    const urlInput = document.getElementById('entry-url');
+    const editIdInput = document.getElementById('edit-id');
+    const formHeading = document.getElementById('form-heading');
+    const saveBtn = document.getElementById('save-btn');
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const previewContainer = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+    const previewFilename = document.getElementById('preview-filename');
+    const removeImgBtn = document.getElementById('remove-img-btn');
+
+    dateInput.value = new Date().toISOString().split('T')[0];
+
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          currentImageData = event.target.result;
+          previewImg.src = currentImageData;
+          previewFilename.textContent = file.name;
+          previewContainer.style.display = 'flex';
+          urlInput.value = '';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    urlInput.addEventListener('input', (e) => {
+      const url = e.target.value.trim();
+      if (url) {
+        currentImageData = url;
+        previewImg.src = url;
+        previewFilename.textContent = 'Remote URL linked';
+        previewContainer.style.display = 'flex';
+        fileInput.value = '';
+      } else if (!fileInput.value) {
+        currentImageData = '';
+        previewContainer.style.display = 'none';
+      }
+    });
+
+    removeImgBtn.addEventListener('click', () => {
+      currentImageData = '';
+      fileInput.value = '';
+      urlInput.value = '';
+      previewContainer.style.display = 'none';
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const id = editIdInput.value || Date.now().toString();
+      const tags = tagsInput.value
+        .split(',')
+        .map(t => t.trim())
+        .filter(t => t.length > 0);
+
+      const entry = {
+        id,
+        title: titleInput.value.trim(),
+        location: locationInput.value.trim(),
+        date: dateInput.value,
+        notes: notesInput.value.trim(),
+        tags,
+        image: currentImageData
+      };
+
+      let entries = getEntries();
+      if (editIdInput.value) {
+        entries = entries.map(item => item.id === id ? entry : item);
+      } else {
+        entries.unshift(entry);
+      }
+
+      saveEntries(entries);
+      resetForm();
+    });
+
+    window.editEntry = function(id) {
+      const entries = getEntries();
+      const entry = entries.find(e => e.id === id);
+      if (!entry) return;
+
+      editIdInput.value = entry.id;
+      titleInput.value = entry.title;
+      locationInput.value = entry.location || '';
+      dateInput.value = entry.date;
+      notesInput.value = entry.notes;
+      tagsInput.value = (entry.tags || []).join(', ');
+
+      if (entry.image) {
+        currentImageData = entry.image;
+        previewImg.src = entry.image;
+        previewFilename.textContent = 'Existing Attachment';
+        previewContainer.style.display = 'flex';
+      } else {
+        currentImageData = '';
+        previewContainer.style.display = 'none';
+      }
+
+      formHeading.textContent = 'Edit Journal Entry';
+      saveBtn.textContent = 'Save Changes';
+      cancelEditBtn.style.display = 'inline-block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.deleteEntry = function(id) {
+      if (confirm('Delete this diary entry?')) {
+        let entries = getEntries();
+        entries = entries.filter(e => e.id !== id);
+        saveEntries(entries);
+      }
+    };
+
+    cancelEditBtn.addEventListener('click', resetForm);
+
+    function resetForm() {
+      form.reset();
+      editIdInput.value = '';
+      currentImageData = '';
+      dateInput.value = new Date().toISOString().split('T')[0];
+      previewContainer.style.display = 'none';
+      formHeading.textContent = 'Create Journal Entry';
+      saveBtn.textContent = 'Publish Entry';
+      cancelEditBtn.style.display = 'none';
+    }
+
+    renderEntries();
+  </script>
+</body>
+</html>
